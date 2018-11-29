@@ -21,8 +21,7 @@ public class RoadTrip implements Serializable {
 
     public RoadTrip(){}
 
-    public RoadTrip(Long id_roadtrip, byte capacity, boolean canceled, byte remainingPlace, User driver, Set<Step> steps, Set<Comment> comments) {
-        this.id_roadtrip=id_roadtrip;
+    public RoadTrip(byte capacity, boolean canceled, byte remainingPlace, User driver, Set<Step> steps, Set<Comment> comments) {
         this.capacity=capacity;
         this.canceled=canceled;
         this.remainingPlace=remainingPlace;

@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 public class Comment implements Serializable {
@@ -21,8 +21,7 @@ public class Comment implements Serializable {
     public Comment() {
     }
 
-    public Comment(Long id_comment, String content, String title, Date date, RoadTrip roadTrip, User user) {
-        this.id_comment=id_comment;
+    public Comment(String content, String title, Date date, RoadTrip roadTrip, User user) {
         this.content=content;
         this.title=title;
         this.date=date;
