@@ -1,9 +1,6 @@
 package org.ln.autopartagedata.domaine;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -15,8 +12,12 @@ public class RoadTrip implements Serializable {
     private byte capacity;
     private boolean canceled;
     private byte remainingPlace;
+    @ManyToOne
+    @JoinColumn( name = "id_user" )
     private User driver;
+    @OneToMany( mappedBy = "roadTrip", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Step> steps;
+    @OneToMany( mappedBy = "roadTrip", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Comment> comments;
 
     public RoadTrip(){}

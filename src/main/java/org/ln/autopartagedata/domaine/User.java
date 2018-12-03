@@ -1,10 +1,8 @@
 package org.ln.autopartagedata.domaine;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 public class User implements Serializable {
@@ -17,17 +15,25 @@ public class User implements Serializable {
     private String email;
     private String phoneNumber;
     private byte birthYear;
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    private Set<Comment> comments;
+    @OneToMany( mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    private Set<RoadTrip> roadTrips;
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    private Set<UserStep> UserStep_stepId;
 
     public User() {
     }
 
-    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, byte birthYear) {
+    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, byte birthYear, Set<Comment> comments, Set<RoadTrip> roadTrips) {
         this.userGenre=userGenre;
         this.firstName=firstName;
         this.lastName=lastName;
         this.email=email;
         this.phoneNumber=phoneNumber;
         this.birthYear=birthYear;
+        this.comments=comments;
+        this.roadTrips=roadTrips;
     }
 
     public Long getId_user() {
@@ -86,6 +92,22 @@ public class User implements Serializable {
         this.birthYear=birthYear;
     }
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments=comments;
+    }
+
+    public Set<RoadTrip> getRoadTrips() {
+        return roadTrips;
+    }
+
+    public void setRoadTrips(Set<RoadTrip> roadTrips) {
+        this.roadTrips=roadTrips;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -96,9 +118,14 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", birthYear=" + birthYear +
+                ", comments" + comments +
+                ", roadTrips" + roadTrips +
                 '}';
     }
 
     private enum Genre {
+        Madame,
+        Monsieur,
+        Autre
     }
 }

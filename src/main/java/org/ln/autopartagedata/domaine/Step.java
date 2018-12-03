@@ -1,9 +1,6 @@
 package org.ln.autopartagedata.domaine;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
@@ -20,13 +17,16 @@ public class Step implements Serializable {
     private Boolean canceled;
     private Date realStratTime;
     private Date realEndTime;
-    private Set<User> passengers;
+    @OneToMany( mappedBy = "step", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    private Set<UserStep> UserStep_userId;
+    @ManyToOne
+    @JoinColumn( name = "id_roadtrip" )//préciser le nom de la colonne créée pour la clé étrangère sinon JPA crée des nom barbares
     private RoadTrip roadTrip;
 
     public Step() {
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<User> passengers, RoadTrip roadTrip) {
+    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<UserStep> UserStep_userId, RoadTrip roadTrip) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStratTime=estimateStratTime;
@@ -34,7 +34,7 @@ public class Step implements Serializable {
         this.canceled=canceled;
         this.realStratTime=realStratTime;
         this.realEndTime=realEndTime;
-        this.passengers=passengers;
+        this.UserStep_userId=UserStep_userId;
         this.roadTrip=roadTrip;
     }
 
@@ -102,12 +102,12 @@ public class Step implements Serializable {
         this.realEndTime=realEndTime;
     }
 
-    public Set<User> getPassengers() {
-        return passengers;
+    public Set<UserStep> getPassengers() {
+        return UserStep_userId;
     }
 
-    public void setPassengers(Set<User> passengers) {
-        this.passengers=passengers;
+    public void setPassengers(Set<UserStep> passengers) {
+        this.UserStep_userId=passengers;
     }
 
     public RoadTrip getRoadTrip() {
@@ -129,7 +129,7 @@ public class Step implements Serializable {
                 ", canceled=" + canceled +
                 ", realStratTime=" + realStratTime +
                 ", realEndTime=" + realEndTime +
-                ", passengers=" + passengers +
+                ", passengers=" + UserStep_userId +
                 ", roadTrip=" + roadTrip +
                 '}';
     }

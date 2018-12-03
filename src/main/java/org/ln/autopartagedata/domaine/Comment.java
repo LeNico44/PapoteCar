@@ -1,9 +1,6 @@
 package org.ln.autopartagedata.domaine;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -15,7 +12,11 @@ public class Comment implements Serializable {
     private String content;
     private String title;
     private Date date;
+    @ManyToOne
+    @JoinColumn( name = "id_roadtrip" )
     private RoadTrip roadTrip;
+    @ManyToOne
+    @JoinColumn( name = "id_user" )
     private User user;
 
     public Comment() {
