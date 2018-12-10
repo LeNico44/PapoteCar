@@ -18,7 +18,7 @@ public class Step implements Serializable {
     private Date realStratTime;
     private Date realEndTime;
     @OneToMany( mappedBy = "step", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
-    private Set<UserStep> UserStep_userId;
+    private Set<Passenger> passengers;
     @ManyToOne
     @JoinColumn( name = "id_roadtrip" )//préciser le nom de la colonne créée pour la clé étrangère sinon JPA crée des nom barbares
     private RoadTrip roadTrip;
@@ -26,7 +26,7 @@ public class Step implements Serializable {
     public Step() {
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<UserStep> UserStep_userId, RoadTrip roadTrip) {
+    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStratTime=estimateStratTime;
@@ -34,7 +34,7 @@ public class Step implements Serializable {
         this.canceled=canceled;
         this.realStratTime=realStratTime;
         this.realEndTime=realEndTime;
-        this.UserStep_userId=UserStep_userId;
+        this.passengers=passengers;
         this.roadTrip=roadTrip;
     }
 
@@ -102,12 +102,12 @@ public class Step implements Serializable {
         this.realEndTime=realEndTime;
     }
 
-    public Set<UserStep> getPassengers() {
-        return UserStep_userId;
+    public Set<Passenger> getPassengers() {
+        return passengers;
     }
 
-    public void setPassengers(Set<UserStep> passengers) {
-        this.UserStep_userId=passengers;
+    public void setPassengers(Set<Passenger> passengers) {
+        this.passengers=passengers;
     }
 
     public RoadTrip getRoadTrip() {
@@ -129,7 +129,7 @@ public class Step implements Serializable {
                 ", canceled=" + canceled +
                 ", realStratTime=" + realStratTime +
                 ", realEndTime=" + realEndTime +
-                ", passengers=" + UserStep_userId +
+                ", passengers=" + passengers +
                 ", roadTrip=" + roadTrip +
                 '}';
     }

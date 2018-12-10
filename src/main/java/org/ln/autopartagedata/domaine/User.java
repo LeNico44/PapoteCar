@@ -20,12 +20,12 @@ public class User implements Serializable {
     @OneToMany( mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<RoadTrip> roadTrips;
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
-    private Set<UserStep> UserStep_stepId;
+    private Set<Passenger> passengers;
 
     public User() {
     }
 
-    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, byte birthYear, Set<Comment> comments, Set<RoadTrip> roadTrips) {
+    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, byte birthYear, Set<Comment> comments, Set<RoadTrip> roadTrips, Set<Passenger> passengers) {
         this.userGenre=userGenre;
         this.firstName=firstName;
         this.lastName=lastName;
@@ -34,6 +34,7 @@ public class User implements Serializable {
         this.birthYear=birthYear;
         this.comments=comments;
         this.roadTrips=roadTrips;
+        this.passengers=passengers;
     }
 
     public Long getId_user() {
@@ -108,6 +109,14 @@ public class User implements Serializable {
         this.roadTrips=roadTrips;
     }
 
+    public Set<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Set<Passenger> passengers) {
+        this.passengers=passengers;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -120,6 +129,7 @@ public class User implements Serializable {
                 ", birthYear=" + birthYear +
                 ", comments" + comments +
                 ", roadTrips" + roadTrips +
+                ", passengers" + passengers +
                 '}';
     }
 

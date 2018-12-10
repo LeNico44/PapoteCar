@@ -5,25 +5,25 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@IdClass(UserStep.PK.class)
-public class UserStep {
+@IdClass(Passenger.PK.class)
+public class Passenger {
 
     @Id
     @ManyToOne
-    @JoinColumn(name="UserStep_userId", referencedColumnName="id_user")
+    @JoinColumn(name="userId", referencedColumnName="id_user")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name="UserStep_stepId", referencedColumnName="id_step")
+    @JoinColumn(name="stepId", referencedColumnName="id_step")
     private Step step;
 
     private boolean validate;
 
-    public UserStep() {
+    public Passenger() {
     }
 
-    public UserStep(User user, Step step, boolean validate) {
+    public Passenger(User user, Step step, boolean validate) {
         this.user=user;
         this.step=step;
         this.validate=validate;
