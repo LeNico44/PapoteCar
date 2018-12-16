@@ -13,7 +13,7 @@ public class RoadTrip implements Serializable {
     private boolean canceled;
     private byte remainingPlace;
     @ManyToOne
-    @JoinColumn( name = "id_user" )
+    @JoinColumn( name = "id_driver" )
     private User driver;
     @OneToMany( mappedBy = "roadTrip", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Step> steps;
@@ -21,6 +21,13 @@ public class RoadTrip implements Serializable {
     private Set<Comment> comments;
 
     public RoadTrip(){}
+
+    public RoadTrip(boolean canceled, byte capacity, byte remainingPlace, User driver){
+        this.canceled=canceled;
+        this.capacity=capacity;
+        this.remainingPlace=remainingPlace;
+        this.driver=driver;
+    }
 
     public RoadTrip(byte capacity, boolean canceled, byte remainingPlace, User driver, Set<Step> steps, Set<Comment> comments) {
         this.capacity=capacity;

@@ -26,6 +26,17 @@ public class Step implements Serializable {
     public Step() {
     }
 
+    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, RoadTrip roadTrip) {
+        this.startPoint=startPoint;
+        this.endPoint=endPoint;
+        this.estimateStratTime=estimateStratTime;
+        this.estimateEndTime=estimateEndTime;
+        this.canceled=canceled;
+        this.realStratTime=realStratTime;
+        this.realEndTime=realEndTime;
+        this.roadTrip=roadTrip;
+    }
+
     public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
