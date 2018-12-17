@@ -22,11 +22,12 @@ public class Step implements Serializable {
     @ManyToOne
     @JoinColumn( name = "id_roadtrip" )//préciser le nom de la colonne créée pour la clé étrangère sinon JPA crée des nom barbares
     private RoadTrip roadTrip;
+    private Double price;
 
     public Step() {
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, RoadTrip roadTrip) {
+    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, RoadTrip roadTrip, Double price) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStratTime=estimateStratTime;
@@ -35,9 +36,10 @@ public class Step implements Serializable {
         this.realStratTime=realStratTime;
         this.realEndTime=realEndTime;
         this.roadTrip=roadTrip;
+        this.price=price;
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip) {
+    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip, Double price) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStratTime=estimateStratTime;
@@ -47,6 +49,7 @@ public class Step implements Serializable {
         this.realEndTime=realEndTime;
         this.passengers=passengers;
         this.roadTrip=roadTrip;
+        this.price=price;
     }
 
     public Long getId_step() {
@@ -129,6 +132,14 @@ public class Step implements Serializable {
         this.roadTrip=roadTrip;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price=price;
+    }
+
     @Override
     public String toString() {
         return "Step{" +
@@ -142,6 +153,7 @@ public class Step implements Serializable {
                 ", realEndTime=" + realEndTime +
                 ", passengers=" + passengers +
                 ", roadTrip=" + roadTrip +
+                ", price=" + price +
                 '}';
     }
 }

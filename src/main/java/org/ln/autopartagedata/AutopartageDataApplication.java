@@ -5,15 +5,28 @@ import org.ln.autopartagedata.domaine.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.sql.Date;
 import java.util.Calendar;
 
 
 @SpringBootApplication
 public class AutopartageDataApplication {
 
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
+    }
     public static void main(String[] args) {
+
         ConfigurableApplicationContext context = SpringApplication.run(AutopartageDataApplication.class, args);
 
         UserRepository userRepository = context.getBean("user_dao", UserRepository.class);
@@ -23,7 +36,7 @@ public class AutopartageDataApplication {
         CommentRepository commentRepository = context.getBean("comment_dao", CommentRepository.class);
 
         User user = userRepository.save(new User(User.Genre.Monsieur,"Laurent","Lecomte",
-                "dynaouest@gmail.com","06.06.06.06.06",(byte)70));
+                "dynaouest@gmail.com","06.06.06.06.06",1970));
 
 
         Step step = stepRepository.save(new Step());

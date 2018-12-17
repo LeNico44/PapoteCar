@@ -1,5 +1,6 @@
 package org.ln.autopartagedata.dal;
 
+import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,7 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserRepositoryTest {
+public class UserRepositoryTest extends TestCase {
 
     @Autowired
     UserRepository userRepository;
@@ -20,7 +21,7 @@ public class UserRepositoryTest {
     @Test
     public void finByEmail(){
         User user = userRepository.save(new User(User.Genre.Monsieur,"Laurent","Lecomte",
-                "dynaouest@gmail.com","06.06.06.06.06",(byte)1970));
+                "dynaouest@gmail.com","06.06.06.06.06",(byte)70));
         Assert.assertThat(user.getFirstName(), is(userRepository.findByEmail("dynaouest@gmail.com").getFirstName()));
     }
 

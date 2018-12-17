@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private Byte birthYear;
+    private int birthYear;
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Comment> comments;
     @OneToMany( mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
@@ -24,8 +24,12 @@ public class User implements Serializable {
 
     public User() {
     }
+    public User(int birthYear, String email) {
+        this.birthYear=birthYear;
+        this.email=email;
+    }
 
-    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, Byte birthYear) {
+    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear) {
         this.userGenre=userGenre;
         this.firstName=firstName;
         this.lastName=lastName;
@@ -34,7 +38,7 @@ public class User implements Serializable {
         this.birthYear=birthYear;
     }
 
-    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, Byte birthYear, Set<Comment> comments, Set<RoadTrip> roadTrips, Set<Passenger> passengers) {
+    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear, Set<Comment> comments, Set<RoadTrip> roadTrips, Set<Passenger> passengers) {
         this.userGenre=userGenre;
         this.firstName=firstName;
         this.lastName=lastName;
@@ -94,11 +98,11 @@ public class User implements Serializable {
         this.phoneNumber=phoneNumber;
     }
 
-    public Byte getBirthYear() {
+    public int getBirthYear() {
         return birthYear;
     }
 
-    public void setBirthYear(Byte birthYear) {
+    public void setBirthYear(int birthYear) {
         this.birthYear=birthYear;
     }
 
