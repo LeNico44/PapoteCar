@@ -1,7 +1,11 @@
 package org.ln.autopartagedata.domaine;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -9,9 +13,10 @@ public class RoadTrip implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private byte capacity;
+    private int capacity;
     private boolean canceled;
-    private byte remainingPlace;
+    private int remainingPlace;
+    //@NotNull
     @ManyToOne
     @JoinColumn( name = "user_id" )
     private User driver;
@@ -22,14 +27,22 @@ public class RoadTrip implements Serializable {
 
     public RoadTrip(){}
 
-    public RoadTrip(boolean canceled, byte capacity, byte remainingPlace, User driver){
+    public RoadTrip(int capacity, User driver){
+        this.canceled=false;
+        this.capacity=capacity;
+        this.remainingPlace=capacity;
+        this.driver=driver;
+        this.steps = this.getSteps();
+    }
+
+    public RoadTrip(boolean canceled, int capacity, int remainingPlace, User driver){
         this.canceled=canceled;
         this.capacity=capacity;
         this.remainingPlace=remainingPlace;
         this.driver=driver;
     }
 
-    public RoadTrip(byte capacity, boolean canceled, byte remainingPlace, User driver, Set<Step> steps, Set<Comment> comments) {
+    public RoadTrip(int capacity, boolean canceled, int remainingPlace, User driver, Set<Step> steps, Set<Comment> comments) {
         this.capacity=capacity;
         this.canceled=canceled;
         this.remainingPlace=remainingPlace;
@@ -46,11 +59,11 @@ public class RoadTrip implements Serializable {
         this.id=id;
     }
 
-    public byte getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(byte capacity) {
+    public void setCapacity(int capacity) {
         this.capacity=capacity;
     }
 
@@ -62,11 +75,11 @@ public class RoadTrip implements Serializable {
         this.canceled=canceled;
     }
 
-    public byte getRemainingPlace() {
+    public int getRemainingPlace() {
         return remainingPlace;
     }
 
-    public void setRemainingPlace(byte remainingPlace) {
+    public void setRemainingPlace(int remainingPlace) {
         this.remainingPlace=remainingPlace;
     }
 

@@ -2,7 +2,7 @@ package org.ln.autopartagedata.domaine;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -25,6 +25,17 @@ public class Step implements Serializable {
     private Double price;
 
     public Step() {
+    }
+
+    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, RoadTrip roadTrip, Double price) {
+        this.startPoint=startPoint;
+        this.endPoint=endPoint;
+        this.estimateStartTime=estimateStartTime;
+        this.estimateEndTime=estimateEndTime;
+        this.canceled=false;
+        this.roadTrip=roadTrip;
+        this.price=price;
+        this.passengers=this.getPassengers();
     }
 
     public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, RoadTrip roadTrip, Double price) {
