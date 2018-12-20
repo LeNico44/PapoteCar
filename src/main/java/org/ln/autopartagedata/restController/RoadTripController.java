@@ -38,10 +38,11 @@ public class RoadTripController {
         String startTime = jsonObj.getString("starttime");
         String endTime = jsonObj.getString("endtime");
         String capacity = jsonObj.getString("capacity");
+        String distance = jsonObj.getString("distance");
 
         //Création des objets utiles
         RoadTrip roadTrip = new RoadTrip(stringToInt(capacity), null);
-        Step step = new Step(startPoint, endPoint, stringToDateSql(startTime), stringToDateSql(endTime), roadTrip, 0.1);
+        Step step = new Step(startPoint, endPoint, stringToDateSql(startTime), stringToDateSql(endTime), roadTrip, stepService.priceCalculation(stringToDouble(distance)), stringToDouble(distance));
 
         //Envoie des objets créés en base
         roadTripService.addRoadTrip(roadTrip);
@@ -65,6 +66,12 @@ public class RoadTripController {
     private int stringToInt(String string){
         //Conversion de la string en integer
         return Integer.parseInt(string);
+    }
+
+    //Convertisseur de String en Double
+    private Double stringToDouble(String string){
+        //Conversion de la string en integer
+        return Double.parseDouble(string);
     }
 
 }

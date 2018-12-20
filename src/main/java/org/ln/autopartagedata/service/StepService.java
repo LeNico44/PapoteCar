@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface StepService {
     void addStep(Step step);
+    Double priceCalculation(Double distance);
 }

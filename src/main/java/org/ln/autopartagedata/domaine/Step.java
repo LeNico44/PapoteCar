@@ -23,11 +23,12 @@ public class Step implements Serializable {
     @JoinColumn( name = "roadTrip_id" )//préciser le nom de la colonne créée pour la clé étrangère sinon JPA crée des nom barbares
     private RoadTrip roadTrip;
     private Double price;
+    private Double distance;
 
     public Step() {
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, RoadTrip roadTrip, Double price) {
+    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, RoadTrip roadTrip, Double price, Double distance) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStartTime=estimateStartTime;
@@ -36,9 +37,10 @@ public class Step implements Serializable {
         this.roadTrip=roadTrip;
         this.price=price;
         this.passengers=this.getPassengers();
+        this.distance = distance;
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, RoadTrip roadTrip, Double price) {
+    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, RoadTrip roadTrip, Double price, Double distance) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStartTime=estimateStartTime;
@@ -48,9 +50,10 @@ public class Step implements Serializable {
         this.realEndTime=realEndTime;
         this.roadTrip=roadTrip;
         this.price=price;
+        this.distance = distance;
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip, Double price) {
+    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip, Double price, Double distance) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
         this.estimateStartTime=estimateStartTime;
@@ -61,6 +64,7 @@ public class Step implements Serializable {
         this.passengers=passengers;
         this.roadTrip=roadTrip;
         this.price=price;
+        this.distance = distance;
     }
 
     public Long getId() {
@@ -151,6 +155,14 @@ public class Step implements Serializable {
         this.price=price;
     }
 
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance=distance;
+    }
+
     @Override
     public String toString() {
         return "Step{" +
@@ -165,6 +177,7 @@ public class Step implements Serializable {
                 ", passengers=" + passengers +
                 ", roadTrip=" + roadTrip +
                 ", price=" + price +
+                ", distance=" + distance +
                 '}';
     }
 }

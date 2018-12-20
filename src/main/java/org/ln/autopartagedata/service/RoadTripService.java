@@ -7,3 +7,4 @@ import org.springframework.stereotype.Service;
 public interface RoadTripService {
     void addRoadTrip(RoadTrip roadTrip);
 }
+
