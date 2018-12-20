@@ -21,7 +21,7 @@ public class UserRepositoryTest extends TestCase {
     @Test
     public void finByEmail(){
         User user = userRepository.save(new User(User.Genre.Monsieur,"Laurent","Lecomte",
-                "dynaouest@gmail.com","06.06.06.06.06",(byte)70));
+                "dynaouest@gmail.com","06.06.06.06.06",70, "Password"));
         Assert.assertThat(user.getFirstName(), is(userRepository.findByEmail("dynaouest@gmail.com").getFirstName()));
     }
 

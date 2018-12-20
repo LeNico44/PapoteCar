@@ -8,12 +8,12 @@ import java.util.Set;
 public class RoadTrip implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_roadtrip;
+    private Long id;
     private byte capacity;
     private boolean canceled;
     private byte remainingPlace;
     @ManyToOne
-    @JoinColumn( name = "id_driver" )
+    @JoinColumn( name = "user_id" )
     private User driver;
     @OneToMany( mappedBy = "roadTrip", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Step> steps;
@@ -38,12 +38,12 @@ public class RoadTrip implements Serializable {
         this.comments=comments;
     }
 
-    public Long getId_roadtrip() {
-        return id_roadtrip;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_roadtrip(Long id_roadtrip) {
-        this.id_roadtrip=id_roadtrip;
+    public void setId(Long id) {
+        this.id=id;
     }
 
     public byte getCapacity() {
@@ -97,7 +97,7 @@ public class RoadTrip implements Serializable {
     @Override
     public String toString() {
         return "RoadTrip{" +
-                "id_roadtrip=" + id_roadtrip +
+                "id=" + id +
                 ", capacity=" + capacity +
                 ", canceled=" + canceled +
                 ", remainingPlace=" + remainingPlace +

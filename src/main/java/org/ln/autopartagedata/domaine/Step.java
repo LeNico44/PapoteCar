@@ -9,55 +9,55 @@ import java.util.Set;
 public class Step implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_step;
+    private Long id;
     private String startPoint;
     private String endPoint;
-    private Date estimateStratTime;
+    private Date estimateStartTime;
     private Date estimateEndTime;
     private Boolean canceled;
-    private Date realStratTime;
+    private Date realStartTime;
     private Date realEndTime;
     @OneToMany( mappedBy = "step", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Passenger> passengers;
     @ManyToOne
-    @JoinColumn( name = "id_roadtrip" )//préciser le nom de la colonne créée pour la clé étrangère sinon JPA crée des nom barbares
+    @JoinColumn( name = "roadTrip_id" )//préciser le nom de la colonne créée pour la clé étrangère sinon JPA crée des nom barbares
     private RoadTrip roadTrip;
     private Double price;
 
     public Step() {
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, RoadTrip roadTrip, Double price) {
+    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, RoadTrip roadTrip, Double price) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
-        this.estimateStratTime=estimateStratTime;
+        this.estimateStartTime=estimateStartTime;
         this.estimateEndTime=estimateEndTime;
         this.canceled=canceled;
-        this.realStratTime=realStratTime;
+        this.realStartTime=realStartTime;
         this.realEndTime=realEndTime;
         this.roadTrip=roadTrip;
         this.price=price;
     }
 
-    public Step(String startPoint, String endPoint, Date estimateStratTime, Date estimateEndTime, Boolean canceled, Date realStratTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip, Double price) {
+    public Step(String startPoint, String endPoint, Date estimateStartTime, Date estimateEndTime, Boolean canceled, Date realStartTime, Date realEndTime, Set<Passenger> passengers, RoadTrip roadTrip, Double price) {
         this.startPoint=startPoint;
         this.endPoint=endPoint;
-        this.estimateStratTime=estimateStratTime;
+        this.estimateStartTime=estimateStartTime;
         this.estimateEndTime=estimateEndTime;
         this.canceled=canceled;
-        this.realStratTime=realStratTime;
+        this.realStartTime=realStartTime;
         this.realEndTime=realEndTime;
         this.passengers=passengers;
         this.roadTrip=roadTrip;
         this.price=price;
     }
 
-    public Long getId_step() {
-        return id_step;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_step(Long id_step) {
-        this.id_step=id_step;
+    public void setId(Long id) {
+        this.id=id;
     }
 
     public String getStartPoint() {
@@ -76,12 +76,12 @@ public class Step implements Serializable {
         this.endPoint=endPoint;
     }
 
-    public Date getEstimateStratTime() {
-        return estimateStratTime;
+    public Date getEstimateStartTime() {
+        return estimateStartTime;
     }
 
-    public void setEstimateStratTime(Date estimateStratTime) {
-        this.estimateStratTime=estimateStratTime;
+    public void setEstimateStartTime(Date estimateStartTime) {
+        this.estimateStartTime=estimateStartTime;
     }
 
     public Date getEstimateEndTime() {
@@ -100,12 +100,12 @@ public class Step implements Serializable {
         this.canceled=canceled;
     }
 
-    public Date getRealStratTime() {
-        return realStratTime;
+    public Date getRealStartTime() {
+        return realStartTime;
     }
 
-    public void setRealStratTime(Date realStratTime) {
-        this.realStratTime=realStratTime;
+    public void setRealStartTime(Date realStartTime) {
+        this.realStartTime=realStartTime;
     }
 
     public Date getRealEndTime() {
@@ -143,13 +143,13 @@ public class Step implements Serializable {
     @Override
     public String toString() {
         return "Step{" +
-                "id_step=" + id_step +
+                "id=" + id +
                 ", startPoint='" + startPoint + '\'' +
                 ", endPoint='" + endPoint + '\'' +
-                ", estimateStratTime=" + estimateStratTime +
+                ", estimateStartTime=" + estimateStartTime +
                 ", estimateEndTime=" + estimateEndTime +
                 ", canceled=" + canceled +
-                ", realStratTime=" + realStratTime +
+                ", realStartTime=" + realStartTime +
                 ", realEndTime=" + realEndTime +
                 ", passengers=" + passengers +
                 ", roadTrip=" + roadTrip +

@@ -10,12 +10,12 @@ public class Passenger {
 
     @Id
     @ManyToOne
-    @JoinColumn(name="userId", referencedColumnName="id_user")
+    @JoinColumn(name="userId", referencedColumnName="id")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name="stepId", referencedColumnName="id_step")
+    @JoinColumn(name="stepId", referencedColumnName="id")
     private Step step;
 
     private boolean validate;

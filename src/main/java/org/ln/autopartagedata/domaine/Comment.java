@@ -10,12 +10,12 @@ import java.util.Objects;
 public class Comment implements Serializable {
     @Id
     @ManyToOne
-    @JoinColumn(name="userId", referencedColumnName="id_user")
+    @JoinColumn(name="user_id")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name="roadTripId", referencedColumnName="id_roadTrip")
+    @JoinColumn(name="road_trip_id")
     private RoadTrip roadTrip;
 
     private String content;

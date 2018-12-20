@@ -1,17 +1,10 @@
 package org.ln.autopartagedata.service;
 
-import org.ln.autopartagedata.dal.UserRepository;
 import org.ln.autopartagedata.domaine.User;
+import org.springframework.stereotype.Service;
 
-public class UserService extends GenericService <UserRepository, User>{
-
-    public User findByEmail(String email){
-        return repository.findByEmail(email);
-    }
-
-    public boolean getUserBirthYear(User user){
-        //TODO recupération de la date et extraction de l'année de naissance
-        return true;
-    }
-
+@Service
+public interface UserService {
+    User findByEmail(String email);
+    User getUserById(Long id);
 }

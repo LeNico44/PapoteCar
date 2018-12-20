@@ -1,5 +1,7 @@
 package org.ln.autopartagedata.domaine;
 
+import org.hibernate.annotations.ColumnTransformer;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -8,54 +10,56 @@ import java.util.Set;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_user;
+    private Long id;
     private Genre userGenre;
     private String firstName;
     private String lastName;
+    @Column(unique=true)
     private String email;
     private String phoneNumber;
     private int birthYear;
-    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    @Column
+    @ColumnTransformer(forColumn="password")
+    private String password;
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true )
     private Set<Comment> comments;
-    @OneToMany( mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    @OneToMany( mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<RoadTrip> roadTrips;
-    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Passenger> passengers;
 
     public User() {
     }
-    public User(int birthYear, String email) {
-        this.birthYear=birthYear;
-        this.email=email;
-    }
 
-    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear) {
+    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear, String password) {
         this.userGenre=userGenre;
         this.firstName=firstName;
         this.lastName=lastName;
         this.email=email;
         this.phoneNumber=phoneNumber;
         this.birthYear=birthYear;
+        this.password=password;
     }
 
-    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear, Set<Comment> comments, Set<RoadTrip> roadTrips, Set<Passenger> passengers) {
+    public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear, String password, Set<Comment> comments, Set<RoadTrip> roadTrips, Set<Passenger> passengers) {
         this.userGenre=userGenre;
         this.firstName=firstName;
         this.lastName=lastName;
         this.email=email;
         this.phoneNumber=phoneNumber;
         this.birthYear=birthYear;
+        this.password=password;
         this.comments=comments;
         this.roadTrips=roadTrips;
         this.passengers=passengers;
     }
 
-    public Long getId_user() {
-        return id_user;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_user(Long id_user) {
-        this.id_user=id_user;
+    public void setId(Long id) {
+        this.id=id;
     }
 
     public Genre getUserGenre() {
@@ -106,6 +110,14 @@ public class User implements Serializable {
         this.birthYear=birthYear;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password=password;
+    }
+
     public Set<Comment> getComments() {
         return comments;
     }
@@ -133,13 +145,14 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id_user=" + id_user +
+                "id=" + id +
                 ", userGenre=" + userGenre +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", birthYear=" + birthYear +
+                ", password=" + password +
                 ", comments" + comments +
                 ", roadTrips" + roadTrips +
                 ", passengers" + passengers +
