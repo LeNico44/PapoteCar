@@ -1,13 +1,13 @@
 package org.ln.autopartagedata.domaine;
 
-import org.hibernate.annotations.ColumnTransformer;
-
+import org.ln.autopartagedata.bCrypt.Hashing;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,8 +18,6 @@ public class User implements Serializable {
     private String email;
     private String phoneNumber;
     private int birthYear;
-    @Column
-    @ColumnTransformer(forColumn="password")
     private String password;
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true )
     private Set<Comment> comments;
@@ -38,7 +36,7 @@ public class User implements Serializable {
         this.email=email;
         this.phoneNumber=phoneNumber;
         this.birthYear=birthYear;
-        this.password=password;
+        this.password=Hashing.hash(password);
     }
 
     public User(Genre userGenre, String firstName, String lastName, String email, String phoneNumber, int birthYear, String password, Set<Comment> comments, Set<RoadTrip> roadTrips, Set<Passenger> passengers) {
@@ -48,7 +46,7 @@ public class User implements Serializable {
         this.email=email;
         this.phoneNumber=phoneNumber;
         this.birthYear=birthYear;
-        this.password=password;
+        this.password=Hashing.hash(password);
         this.comments=comments;
         this.roadTrips=roadTrips;
         this.passengers=passengers;

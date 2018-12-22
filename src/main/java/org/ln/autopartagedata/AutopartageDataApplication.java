@@ -1,6 +1,5 @@
 package org.ln.autopartagedata;
 
-import org.apache.logging.log4j.spi.AbstractLogger;
 import org.ln.autopartagedata.bCrypt.Hashing;
 import org.ln.autopartagedata.bCrypt.UpdatableBCrypt;
 import org.ln.autopartagedata.dal.*;
@@ -13,12 +12,25 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import java.util.Calendar;
 import java.util.function.Function;
 
 
 @SpringBootApplication
 public class AutopartageDataApplication {
+
+
+    @Configuration
+    public class WebConfig implements WebMvcConfigurer {
+        @Override
+        public void addCorsMappings( CorsRegistry registry ) {
+            registry.addMapping( "/api-rest/**" ).allowedOrigins( "*" ).allowedHeaders( "*" )
+                    .allowedMethods( "*" );
+        }
+    }
 
     @Configuration
     public class GlobalRepositoryRestConfigurer implements RepositoryRestConfigurer {
@@ -60,6 +72,7 @@ public class AutopartageDataApplication {
         System.out.println(u2.getId());
 
         /**************************************************************************/
+        System.out.println("/**************************************************************************/");
 
         final Logger log = UpdatableBCrypt.getLog();
 
@@ -68,18 +81,16 @@ public class AutopartageDataApplication {
 
         String hashPw1 = Hashing.hash("password");
 
-        System.out.println("hash of pw1: {}" + hashPw1);
-        log.debug("verifying pw1: {}", Hashing.verifyAndUpdateHash("password", hashPw1, update));
-        log.debug("verifying pw1 fails: {}", Hashing.verifyAndUpdateHash("password1", hashPw1, update));
-        String hashPw2 = Hashing.hash("password");
-        log.debug("hash of pw2: {}", hashPw2);
-        log.debug("verifying pw2: {}", Hashing.verifyAndUpdateHash("password", hashPw2, update));
-        log.debug("verifying pw2 fails: {}", Hashing.verifyAndUpdateHash("password2", hashPw2, update));
+        log.info("hash of pw1: {}", hashPw1);
+        log.info("verifying pw1: {}", Hashing.verifyAndUpdateHash("password", hashPw1, update));
+        log.info("verifying pw1 fails: {}", Hashing.verifyAndUpdateHash("password1", hashPw1, update));
 
         UpdatableBCrypt oldHasher = new UpdatableBCrypt(7);
+
         String oldHash = oldHasher.hash("password");
-        log.debug("hash of oldHash: {}", oldHash);
-        log.debug("verifying oldHash: {}, hash upgraded to: {}",
+
+        log.info("hash of oldHash: {}", oldHash);
+        log.info("verifying oldHash: {}, hash upgraded to: {}",
                 Hashing.verifyAndUpdateHash("password", oldHash, update),
                 mutableHash[0]);
     }
