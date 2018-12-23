@@ -52,4 +52,22 @@ public class GenericService<T extends CrudRepository<E, Long>,E> {
         }
         return theBoolean;
     }
+
+    //Récupérer valeur numérique d'une string
+    public String catchValueString(String string){
+        String value = "";
+        String[] listValues = string.split(" ");
+        for (int i = 0, size = listValues.length; i < size; i++ ) {
+            String section = listValues[i];
+            String firstCaractere = section.substring(0,1);
+            try {
+                Integer.parseInt(firstCaractere);
+                value = value + section;
+            } catch (NumberFormatException e) {
+                e.getMessage();
+            }
+        }
+
+        return value;
+    }
 }

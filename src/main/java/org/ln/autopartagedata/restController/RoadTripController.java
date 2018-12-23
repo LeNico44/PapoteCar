@@ -47,17 +47,14 @@ public class RoadTripController {
         String additionalInformation = jsonObj.getString("additionalInformation");
         String driverId = "1";//jsonObj.getString("driverId");
 
-        String[] listValues = distance.split(" ");
-        String distanceValue = listValues[0];
-
         //Création des objets utiles
         RoadTrip roadTrip = new RoadTrip(Integer.parseInt(capacity), userService.getUserById(Long.parseLong(driverId)),
                 genericService.stringToBoolean(onlyTwoBackSeatWarranty),
                 additionalInformation);
         Step step = new Step(startPoint, endPoint, genericService.stringToDateSql(startTime),
                 stepService.calculEndTime(travelTime, startTime), roadTrip,
-                stepService.priceCalculation(genericService.stringToDouble(distanceValue)),
-                genericService.stringToDouble(distanceValue));
+                stepService.calculPrice(genericService.stringToDouble(genericService.catchValueString(distance))),
+                genericService.stringToDouble(genericService.catchValueString(distance)));
 
         //Envoie des objets créés en base
         roadTripService.addRoadTrip(roadTrip);

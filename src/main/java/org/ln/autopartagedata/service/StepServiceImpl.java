@@ -13,7 +13,7 @@ import java.util.TimeZone;
 
 @Service
 public class StepServiceImpl extends GenericService<StepRepository, Step> implements StepService {
-    private static final Double PRICE_PER_KILOMETER = 0.50;
+    private static final Double PRICE_PER_KILOMETER = 0.13;
     private StepRepository stepRepository;
 
     @Autowired
@@ -25,7 +25,7 @@ public class StepServiceImpl extends GenericService<StepRepository, Step> implem
     }
 
     @Override
-    public Double priceCalculation(Double distance) {
+    public Double calculPrice(Double distance) {
         Double stepPrice;
         stepPrice = (double) Math.round((distance * PRICE_PER_KILOMETER) * 100) / 100;
         return stepPrice;
