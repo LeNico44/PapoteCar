@@ -123,6 +123,9 @@ public class RoadTripController {
         cal.add(Calendar.DAY_OF_MONTH, aDay);
         cal.add(Calendar.HOUR, aHour);
         cal.add(Calendar.MINUTE, aMinute);
+        Date utilDate = cal.getTime();
+
+        endTime = new java.sql.Date(utilDate.getTime());
 
         return endTime;
     }
