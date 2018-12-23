@@ -55,7 +55,6 @@ public class AutopartageDataApplication {
         User user = userRepository.save(new User(User.Genre.Monsieur,"Laurent","Lecomte",
                 "dynaouest@gmail.com","06.06.06.06.06",1970, "password"));
 
-
         Step step = stepRepository.save(new Step());
 
         RoadTrip roadTrip = roadTripRepository.save(new RoadTrip(false,(byte)3,(byte)3, user));
@@ -69,7 +68,7 @@ public class AutopartageDataApplication {
 
         User u2 = userService.getUserById(user.getId());
 
-        System.out.println(u2.getId());
+        System.out.println(u2.getPassword());
 
         /**************************************************************************/
         System.out.println("/**************************************************************************/");

@@ -113,7 +113,7 @@ public class User implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password=password;
+        this.password=Hashing.hash(password);
     }
 
     public Set<Comment> getComments() {
