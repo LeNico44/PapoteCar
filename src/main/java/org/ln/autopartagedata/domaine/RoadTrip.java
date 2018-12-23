@@ -24,15 +24,19 @@ public class RoadTrip implements Serializable {
     private Set<Step> steps;
     @OneToMany( mappedBy = "roadTrip", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
     private Set<Comment> comments;
+    private boolean onlyTwoBackSeatWarranty;
+    private String additionalInformation;
 
     public RoadTrip(){}
 
-    public RoadTrip(int capacity, User driver){
+    public RoadTrip(int capacity, User driver, boolean onlyTwoBackSeatWarranty, String additionalInformation){
         this.canceled=false;
         this.capacity=capacity;
         this.remainingPlace=capacity;
         this.driver=driver;
         this.steps = this.getSteps();
+        this.onlyTwoBackSeatWarranty = onlyTwoBackSeatWarranty;
+        this.additionalInformation = additionalInformation;
     }
 
     public RoadTrip(boolean canceled, int capacity, int remainingPlace, User driver){
@@ -107,6 +111,22 @@ public class RoadTrip implements Serializable {
         this.comments=comments;
     }
 
+    public boolean isOnlyTwoBackSeatWarranty() {
+        return onlyTwoBackSeatWarranty;
+    }
+
+    public void setOnlyTwoBackSeatWarranty(boolean onlyTwoBackSeatWarranty) {
+        this.onlyTwoBackSeatWarranty=onlyTwoBackSeatWarranty;
+    }
+
+    public String getAdditionalInformation() {
+        return additionalInformation;
+    }
+
+    public void setAdditionalInformation(String additionalInformation) {
+        this.additionalInformation=additionalInformation;
+    }
+
     @Override
     public String toString() {
         return "RoadTrip{" +
@@ -117,6 +137,8 @@ public class RoadTrip implements Serializable {
                 ", driver=" + driver +
                 ", steps=" + steps +
                 ", comments=" + comments +
+                ", onlyTwoBackSeatWarranty=" + onlyTwoBackSeatWarranty +
+                ", additionalInformation=" + additionalInformation +
                 '}';
     }
 }

@@ -4,16 +4,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ln.autopartagedata.domaine.RoadTrip;
 import org.ln.autopartagedata.domaine.Step;
+import org.ln.autopartagedata.service.GenericService;
 import org.ln.autopartagedata.service.RoadTripService;
 import org.ln.autopartagedata.service.StepService;
+import org.ln.autopartagedata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Calendar;
-import java.util.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/api-rest/roadtrips")
@@ -21,15 +18,20 @@ public class RoadTripController {
 
     private RoadTripService roadTripService;
     private StepService stepService;
+    private GenericService genericService;
+    private UserService userService;
 
     @Autowired
-    public RoadTripController(RoadTripService roadTripService, StepService stepService){
+    public RoadTripController(RoadTripService roadTripService, StepService stepService, GenericService genericService,
+                              UserService userService){
         this.roadTripService = roadTripService;
         this.stepService = stepService;
+        this.genericService = genericService;
+        this.userService = userService;
     }
 
     @PostMapping(path="/test",consumes = "application/json")
-    public String saveObj(@RequestBody String json) throws JSONException, ParseException {
+    public String newRoadTrip(@RequestBody String json) throws JSONException, ParseException {
 
         //création d'un objet JSON à partir de la string globale du body (data)
         JSONObject jsonObj=new JSONObject(json);
@@ -41,15 +43,21 @@ public class RoadTripController {
         String travelTime = jsonObj.getString("traveltime");
         String capacity = jsonObj.getString("capacity");
         String distance = jsonObj.getString("distance");
-        String onlyTwoBackSeatWarranty = jsonObj.getString("onlytwobackseatwarranty");
-        String additionalInformation = jsonObj.getString("additionalinformation");
+        String onlyTwoBackSeatWarranty = jsonObj.getString("onlyTwoBackSeatWarranty");
+        String additionalInformation = jsonObj.getString("additionalInformation");
+        String driverId = "1";//jsonObj.getString("driverId");
 
         String[] listValues = distance.split(" ");
         String distanceValue = listValues[0];
 
         //Création des objets utiles
-        RoadTrip roadTrip = new RoadTrip(stringToInt(capacity), null);
-        Step step = new Step(startPoint, endPoint, stringToDateSql(startTime), calculEndTime(travelTime, startTime), roadTrip, stepService.priceCalculation(stringToDouble(distanceValue)), stringToDouble(distanceValue));
+        RoadTrip roadTrip = new RoadTrip(Integer.parseInt(capacity), userService.getUserById(Long.parseLong(driverId)),
+                genericService.stringToBoolean(onlyTwoBackSeatWarranty),
+                additionalInformation);
+        Step step = new Step(startPoint, endPoint, genericService.stringToDateSql(startTime),
+                stepService.calculEndTime(travelTime, startTime), roadTrip,
+                stepService.priceCalculation(genericService.stringToDouble(distanceValue)),
+                genericService.stringToDouble(distanceValue));
 
         //Envoie des objets créés en base
         roadTripService.addRoadTrip(roadTrip);
@@ -57,77 +65,4 @@ public class RoadTripController {
 
         return "success !";
     }
-
-    //Convertisseur de String en Date sql
-    private java.sql.Date stringToDateSql(String string) throws ParseException {
-        //déclaration du format de la date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        //Conversation de la string en simpleDateFormat
-        Date date = sdf.parse(string);
-        //Retour de la date en sql date
-        return new java.sql.Date(date.getTime());
-    }
-
-    //Convertisseur de String en int
-    private int stringToInt(String string){
-        //Conversion de la string en integer
-        return Integer.parseInt(string);
-    }
-
-    //Convertisseur de String en Double
-    private Double stringToDouble(String string){
-
-        String stringPoint = string.replaceAll(",",".");
-        //Conversion de la string en integer
-        return Double.parseDouble(stringPoint);
-    }
-
-    //Parser la string travelTime pour récupérer les valeurs numériques en fonction du type. (day, hour, minute, etc.)
-    private java.sql.Date calculEndTime(String travelTime, String startTime) throws ParseException {
-        java.sql.Date endTime = null;
-
-        String[] listValues = travelTime.split(" ");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date date = sdf.parse(startTime);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        int aDay = 0;
-        int aHour = 0;
-        int aMinute = 0;
-
-        for(int i=1, j=0, size=listValues.length; i < size; i+=2, j+=2){
-            int valueTime = Integer.parseInt(listValues[j]);
-            String typeTime = listValues[i];
-            switch(typeTime.substring(0,3)){
-                case "jou":
-                    aDay = valueTime;
-                    System.out.println("Le type trouvé correspond à (" + typeTime + ") " + aDay);
-                    break;
-                case "heu":
-                    aHour = valueTime;
-                    System.out.println("Le type trouvé correspond à (" + typeTime + ") " + aHour);
-                    break;
-                case "min":
-                    aMinute = valueTime;
-                    System.out.println("Le type trouvé correspond à (" + typeTime + ") " + aMinute);
-                    break;
-                default :
-                    System.out.println("Aucune correspondance dans le use case pour " + typeTime.substring(0,3) + " !");
-            }
-        }
-
-        cal.add(Calendar.DAY_OF_MONTH, aDay);
-        cal.add(Calendar.HOUR, aHour);
-        cal.add(Calendar.MINUTE, aMinute);
-        Date utilDate = cal.getTime();
-
-        endTime = new java.sql.Date(utilDate.getTime());
-
-        return endTime;
-    }
-
 }
