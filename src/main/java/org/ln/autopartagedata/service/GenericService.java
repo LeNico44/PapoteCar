@@ -56,6 +56,7 @@ public class GenericService<T extends CrudRepository<E, Long>,E> {
     //Récupérer valeur numérique d'une string
     public String catchValueString(String string){
         String value = "";
+        string = string.replaceAll(" "," ");
         String[] listValues = string.split(" ");
         for (int i = 0, size = listValues.length; i < size; i++ ) {
             String section = listValues[i];
