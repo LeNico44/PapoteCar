@@ -1,5 +1,6 @@
 package org.ln.autopartagedata.restController;
 import io.swagger.annotations.ApiOperation;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ln.autopartagedata.bCrypt.Hashing;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.function.Function;
 
 @RestController
-@RequestMapping("/api-rest")
+@RequestMapping("/api-rest/users")
 public class UserRestController {
 
     private UserService userService;
@@ -37,12 +38,11 @@ public class UserRestController {
         return jsonObj.getString("email");
     }*/
 
-    @GetMapping(path="/connection",produces="application/json")
-    public String userConnection(@RequestBody String json) throws JSONException {
+    @PostMapping(path="/connection",produces="application/json")
+    public @ResponseBody String userConnection(@RequestBody String json) throws JSONException {
         System.out.println(json);
-        User user = null;
-        String retour = "";
-        JSONObject jsonObjResponse = new JSONObject();
+        User user;
+        JSONObject jsonRetour = new JSONObject();
         //création d'un objet JSON à partir de la string globale du body (data)
         JSONObject jsonObj=new JSONObject(json);
 
@@ -55,28 +55,24 @@ public class UserRestController {
         if (user != null){
             String[] mutableHash = new String[1];
             Function<String, Boolean> update =hash -> { mutableHash[0] = hash; return true; };
-            if(Hashing.verifyAndUpdateHash(password, user.getPassword(), update)){
-                retour = "{\n" +
-                        "\t\"id\":\"" + user.getId() + "\",\n" +
-                        "\t\"userGenre\":\"" + user.getUserGenre() + "\",\n" +
-                        "\t\"firstName\":\"" + user.getFirstName() + "\",\n" +
-                        "\t\"lastName\":\"" + user.getLastName() + "\",\n" +
-                        "\t\"email\":\"" + user.getEmail() + "\",\n" +
-                        "\t\"phoneNumber\":\"" + user.getPhoneNumber() + "\",\n" +
-                        "\t\"birthYear\":\"" + user.getBirthYear() + "\",\n" +
-                        "}";
+            if(Hashing.verifyAndUpdateHash(password, user.getPassword(), update)){ 
+                
+                jsonRetour.put("id", user.getId());
+                jsonRetour.put("userGenre", user.getUserGenre());
+                jsonRetour.put("firstName", user.getFirstName());
+                jsonRetour.put("lastName", user.getLastName());
+                jsonRetour.put("email", user.getEmail());
+                jsonRetour.put("phoneNumber", user.getPhoneNumber());
+                jsonRetour.put("birthYear", user.getBirthYear());
+                
             }else{
-                retour = "{\n" +
-                        "\t\"retour\":\"Ce mot de passe ne correspond pas à l'adresse " + user.getEmail() + " !\",\n" +
-                        "}";
+                jsonRetour.put("retour","Ce mot de passe ne correspond pas à l'adresse " + user.getEmail() + " !");
             }
         }else{
-            retour = "{\n" +
-                    "\t\"retour\":\"Aucun user n'est enregistré avec cette adresse email.\"\n" +
-                    "}";
+            jsonRetour.put("retour", "Aucun user n'est enregistré avec cette adresse email.");
         }
 
-        return retour;
+        return jsonRetour.toString();
     }
 }
 
