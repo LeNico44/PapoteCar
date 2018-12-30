@@ -1,8 +1,5 @@
 package org.ln.autopartagedata.restController;
 
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ln.autopartagedata.domaine.RoadTrip;
@@ -65,6 +62,9 @@ public class RoadTripController {
         roadTripService.addRoadTrip(roadTrip);
         stepService.addStep(step);
 
-        return "Success !";
+        JSONObject jsonRetour = new JSONObject();
+        jsonRetour.put("retour", "Success !");
+
+        return jsonRetour.toString();
     }
 }
