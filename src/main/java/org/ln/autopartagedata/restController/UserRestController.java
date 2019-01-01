@@ -53,9 +53,9 @@ public class UserRestController {
         user = userService.findByEmail(email);
 
         if (user != null){
-            String[] mutableHash = new String[1];
+            String[] mutableHash = new String[0];
             Function<String, Boolean> update =hash -> { mutableHash[0] = hash; return true; };
-            if(Hashing.verifyAndUpdateHash(password, user.getPassword(), update)){ 
+            if(Hashing.verifyAndUpdateHash(password, user.getPassword(), update)){
                 
                 jsonRetour.put("id", user.getId());
                 jsonRetour.put("userGenre", user.getUserGenre());

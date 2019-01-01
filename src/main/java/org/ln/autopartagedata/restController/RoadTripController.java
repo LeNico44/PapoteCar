@@ -47,10 +47,11 @@ public class RoadTripController {
         String distance = jsonObj.getString("distance");
         String onlyTwoBackSeatWarranty = jsonObj.getString("onlyTwoBackSeatWarranty");
         String additionalInformation = jsonObj.getString("additionalInformation");
-        String driverId = "1";//jsonObj.getString("driverId");
+        Long driverId = jsonObj.getLong("id");
+
 
         //Création des objets utiles
-        RoadTrip roadTrip=new RoadTrip(Integer.parseInt(capacity), userService.getUserById(Long.parseLong(driverId)),
+        RoadTrip roadTrip=new RoadTrip(Integer.parseInt(capacity), userService.getUserById(driverId),
                 genericService.stringToBoolean(onlyTwoBackSeatWarranty),
                 additionalInformation);
         Step step=new Step(startPoint, endPoint, genericService.stringToDateSql(startTime),
