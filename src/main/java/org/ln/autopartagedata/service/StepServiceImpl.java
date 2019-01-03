@@ -33,14 +33,11 @@ public class StepServiceImpl extends GenericService<StepRepository, Step> implem
 
     //Parser la string travelTime pour récupérer les valeurs numériques en fonction du type. (day, hour, minute, etc.)
     @Override
-    public java.sql.Date calculEndTime(String travelTime, String startTime) throws ParseException {
+    public java.sql.Date calculEndTime(String travelTime, Date date) throws ParseException {
         java.sql.Date endTime = null;
 
         String[] listValues = travelTime.split(" ");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date date = sdf.parse(startTime);
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
 
@@ -54,18 +51,13 @@ public class StepServiceImpl extends GenericService<StepRepository, Step> implem
             switch(typeTime.substring(0,3)){
                 case "jou":
                     aDay = valueTime;
-                    System.out.println("Le type trouvé correspond à (" + typeTime + ") " + aDay);
                     break;
                 case "heu":
                     aHour = valueTime;
-                    System.out.println("Le type trouvé correspond à (" + typeTime + ") " + aHour);
                     break;
                 case "min":
                     aMinute = valueTime;
-                    System.out.println("Le type trouvé correspond à (" + typeTime + ") " + aMinute);
                     break;
-                default :
-                    System.out.println("Aucune correspondance dans le use case pour " + typeTime.substring(0,3) + " !");
             }
         }
 
@@ -78,4 +70,16 @@ public class StepServiceImpl extends GenericService<StepRepository, Step> implem
 
         return endTime;
     }
+
+    @Override
+    public java.sql.Date calculEndTimeFromString(String travelTime, String startTime) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = sdf.parse(startTime);
+
+        return calculEndTime(travelTime, date);
+    }
+
+
 }

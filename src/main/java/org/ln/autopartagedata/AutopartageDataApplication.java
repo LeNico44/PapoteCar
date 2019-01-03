@@ -55,6 +55,7 @@ public class AutopartageDataApplication {
         User user = userRepository.save(new User(User.Genre.Monsieur,"Laurent","Lecomte",
                 "dynaouest@gmail.com","06.06.06.06.06",1970, "password"));
 
+        /*
         Step step = stepRepository.save(new Step());
 
         RoadTrip roadTrip = roadTripRepository.save(new RoadTrip(false,(byte)3,(byte)3, user));
@@ -70,9 +71,12 @@ public class AutopartageDataApplication {
 
         System.out.println(u2.getPassword());
 
+        */
+
         /**************************************************************************/
         System.out.println("/**************************************************************************/");
 
+        /*
         final Logger log = UpdatableBCrypt.getLog();
 
         String[] mutableHash = new String[1];
@@ -92,6 +96,7 @@ public class AutopartageDataApplication {
         log.info("verifying oldHash: {}, hash upgraded to: {}",
                 Hashing.verifyAndUpdateHash("password", oldHash, update),
                 mutableHash[0]);
+        */
     }
 
 }

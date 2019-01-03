@@ -48,19 +48,49 @@ public class RoadTripController {
         String onlyTwoBackSeatWarranty = jsonObj.getString("onlyTwoBackSeatWarranty");
         String additionalInformation = jsonObj.getString("additionalInformation");
         Long driverId = jsonObj.getLong("id");
+        String stepPoint = jsonObj.getString("steppoint");
 
-
-        //Création des objets utiles
-        RoadTrip roadTrip=new RoadTrip(Integer.parseInt(capacity), userService.getUserById(driverId),
+        //Création du roadTrip
+        RoadTrip roadTrip = new RoadTrip(Integer.parseInt(capacity), userService.getUserById(driverId),
                 genericService.stringToBoolean(onlyTwoBackSeatWarranty),
                 additionalInformation);
-        Step step=new Step(startPoint, endPoint, genericService.stringToDateSql(startTime),
-                stepService.calculEndTime(travelTime, startTime), roadTrip,
-                stepService.calculPrice(genericService.stringToDouble(genericService.catchValueString(distance))),
-                genericService.stringToDouble(genericService.catchValueString(distance)));
 
-        //Envoie des objets créés en base
+        //Création du step vide
+        Step step = new Step();
+
+        //Envoie du roadTrip créé en base
         roadTripService.addRoadTrip(roadTrip);
+
+        if(stepPoint.equals("")){
+
+            step=new Step(startPoint, endPoint, genericService.stringToDateSql(startTime),
+                    stepService.calculEndTimeFromString(travelTime, startTime), roadTrip,
+                    stepService.calculPrice(genericService.stringToDouble(genericService.catchValueString(distance))),
+                    genericService.stringToDouble(genericService.catchValueString(distance)));
+        }else{
+
+            String stepDistance = jsonObj.getString("stepDistance");
+            String stepTravelTime = jsonObj.getString("stepTime");
+            String startStepTime = stepService.calculEndTimeFromString(travelTime, startTime).toString();
+
+
+            Step step1=new Step(startPoint, stepPoint, genericService.stringToDateSql(startTime),
+                    stepService.calculEndTimeFromString(travelTime, startTime), roadTrip,
+                    stepService.calculPrice(genericService.stringToDouble(genericService.catchValueString(stepDistance))),
+                    genericService.stringToDouble(genericService.catchValueString(stepDistance)));
+
+            step=new Step(stepPoint, endPoint, stepService.calculEndTimeFromString(travelTime, startTime),
+                    stepService.calculEndTime(stepTravelTime, stepService.calculEndTimeFromString(travelTime, startTime)), roadTrip,
+                    stepService.calculPrice(genericService.stringToDouble(genericService.catchValueString(distance))),
+                    genericService.stringToDouble(genericService.catchValueString(distance)));
+
+            //Envoie du step1 créé en base
+            stepService.addStep(step1);
+
+        }
+
+
+        //Envoie du step créé en base
         stepService.addStep(step);
 
         JSONObject jsonRetour = new JSONObject();
