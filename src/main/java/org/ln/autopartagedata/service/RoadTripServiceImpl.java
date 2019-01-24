@@ -2,8 +2,12 @@ package org.ln.autopartagedata.service;
 
 import org.ln.autopartagedata.dal.RoadTripRepository;
 import org.ln.autopartagedata.domaine.RoadTrip;
+import org.ln.autopartagedata.domaine.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoadTripServiceImpl extends GenericService <RoadTripRepository, RoadTrip> implements RoadTripService {
@@ -17,4 +21,15 @@ public class RoadTripServiceImpl extends GenericService <RoadTripRepository, Roa
     public void addRoadTrip(RoadTrip roadTrip) {
         roadTripRepository.save(roadTrip);
     }
+
+    @Override
+    public RoadTrip getRoadTripById(Long id) {
+        return this.roadTripRepository.getRoadTripById(id);
+    }
+
+    @Override
+    public RoadTrip getRoadTripByUser(Long user_id) {
+        return this.roadTripRepository.getRoadTripByDriver(user_id);
+    }
+
 }

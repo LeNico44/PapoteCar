@@ -1,9 +1,11 @@
 package org.ln.autopartagedata.restController;
 
+import io.swagger.annotations.ApiOperation;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ln.autopartagedata.domaine.RoadTrip;
 import org.ln.autopartagedata.domaine.Step;
+import org.ln.autopartagedata.domaine.User;
 import org.ln.autopartagedata.service.GenericService;
 import org.ln.autopartagedata.service.RoadTripService;
 import org.ln.autopartagedata.service.StepService;
@@ -12,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api-rest/roadtrips")
@@ -50,8 +55,10 @@ public class RoadTripController {
         Long driverId = jsonObj.getLong("id");
         String stepPoint = jsonObj.getString("steppoint");
 
+        Optional<User> optionalUser = userService.getUserById(driverId);
+
         //Création du roadTrip
-        RoadTrip roadTrip = new RoadTrip(Integer.parseInt(capacity), userService.getUserById(driverId),
+        RoadTrip roadTrip = new RoadTrip(Integer.parseInt(capacity), optionalUser.get(),
                 genericService.stringToBoolean(onlyTwoBackSeatWarranty),
                 additionalInformation);
 
@@ -97,5 +104,51 @@ public class RoadTripController {
         jsonRetour.put("retour", "Success !");
 
         return jsonRetour.toString();
+    }
+
+    @GetMapping(value="/{id}",produces="application/json")
+    @ApiOperation(value = "Get roadTrip by ID")
+    RoadTrip getRoadTripById(@PathVariable final Long id){
+        return this.roadTripService.getRoadTripById(id);
+    }
+
+    @GetMapping(value="/user/{user_id}",produces="application/json")
+    @ApiOperation(value = "Get roadTrip by user_id")
+    RoadTrip getRoadTripByUser(@PathVariable final Long user_id){
+        return this.roadTripService.getRoadTripByUser(user_id);
+    }
+
+    @GetMapping(value="/ultimate_roadtrip/{id}",produces="application/json")
+    @ApiOperation(value = "Get ultimate roadTrip")
+    String getUltimateRoadTripById(@PathVariable final Long id) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject stepJsonObject;
+        JSONObject roadTripJsonObject;
+
+        RoadTrip roadTrip = this.roadTripService.getRoadTripById(id);
+        Set<Step> steps = roadTrip.getSteps();
+
+        int i = 1;
+        if(steps.size() == 1){
+            jsonObject.put("startRoadTrip", roadTrip.getSteps().iterator().next().getStartPoint());
+            jsonObject.put("endRoadTrip", roadTrip.getSteps().iterator().next().getEndPoint());
+        }else{
+            roadTripJsonObject = new JSONObject();
+            for(Step step : steps){
+                stepJsonObject = new JSONObject();
+                stepJsonObject.put("startPoint", step.getStartPoint());
+                stepJsonObject.put("endPoint", step.getEndPoint());
+
+                jsonObject.put("step-" + i++, stepJsonObject);
+                if(i==2){
+                    roadTripJsonObject.put("startPoint", step.getStartPoint());
+                }else{
+                    roadTripJsonObject.put("endPoint", step.getEndPoint());
+                }
+            }
+            jsonObject.put("roadTrip",roadTripJsonObject);
+        }
+
+        return jsonObject.toString();
     }
 }

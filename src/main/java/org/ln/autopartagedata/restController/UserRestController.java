@@ -4,12 +4,15 @@ import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ln.autopartagedata.bCrypt.Hashing;
+import org.ln.autopartagedata.dal.UserRepository;
 import org.ln.autopartagedata.domaine.User;
 import org.ln.autopartagedata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @RestController
@@ -25,8 +28,14 @@ public class UserRestController {
 
     @GetMapping(value="/{id}",produces="application/json")
     @ApiOperation(value = "Get user by ID")
-    User getUserById(@PathVariable final Long id){
+    Optional<User> getUserById(@PathVariable final Long id){
         return this.userService.getUserById(id);
+    }
+
+    @GetMapping(value="/email/{email}",produces="application/json")
+    @ApiOperation(value = "Get user by email")
+    User getUserByEmail(@PathVariable final String email){
+        return this.userService.findByEmail(email);
     }
 
     /*@ResponseBody

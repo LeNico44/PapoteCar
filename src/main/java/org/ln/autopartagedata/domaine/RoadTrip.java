@@ -3,10 +3,7 @@ package org.ln.autopartagedata.domaine;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class RoadTrip implements Serializable {

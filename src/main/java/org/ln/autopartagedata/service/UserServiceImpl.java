@@ -5,6 +5,8 @@ import org.ln.autopartagedata.domaine.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl extends GenericService <UserRepository, User> implements UserService{
 
@@ -17,12 +19,12 @@ public class UserServiceImpl extends GenericService <UserRepository, User> imple
 
     @Override
     public User findByEmail(String email){
-        return userRepository.findByEmail(email);
+        return this.userRepository.findByEmail(email);
     }
 
     @Override
-    public User getUserById(Long id) {
-        return this.userRepository.getUserById(id);
+    public Optional<User> getUserById(Long id) {
+        return this.userRepository.findById(id);
     }
 
 }
