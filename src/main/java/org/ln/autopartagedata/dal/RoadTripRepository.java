@@ -12,6 +12,6 @@ import java.util.Set;
 @RepositoryRestResource(path="roadtrips-list")
 @Component("roadtrip_dao")
 public interface RoadTripRepository extends CrudRepository<RoadTrip, Long> {
-    RoadTrip getRoadTripById(@Param("id") Long id);
-    RoadTrip getRoadTripByDriver(@Param("driver") Long user_id);
+    //RoadTrip getRoadTripById(@Param("id") Long id);
+    //RoadTrip getRoadTripByDriver(@Param("driver") Long user_id);
 }

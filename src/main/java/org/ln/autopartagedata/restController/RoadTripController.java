@@ -101,54 +101,124 @@ public class RoadTripController {
         stepService.addStep(step);
 
         JSONObject jsonRetour = new JSONObject();
-        jsonRetour.put("retour", "Success !");
+        jsonRetour.put("roadTripId", roadTrip.getId().toString());
 
         return jsonRetour.toString();
     }
 
+//    @GetMapping(value="/{id}",produces="application/json")
+//    @ApiOperation(value = "Get roadTrip by ID")
+//    RoadTrip getRoadTripById(@PathVariable final Long id){
+//        return this.roadTripService.getRoadTripById(id);
+//    }
+
+//    @GetMapping(value="/user/{user_id}",produces="application/json")
+//    @ApiOperation(value = "Get roadTrip by user_id")
+//    RoadTrip getRoadTripByUser(@PathVariable final Long user_id){
+//        return this.roadTripService.getRoadTripByUser(user_id);
+//    }
+
     @GetMapping(value="/{id}",produces="application/json")
-    @ApiOperation(value = "Get roadTrip by ID")
-    RoadTrip getRoadTripById(@PathVariable final Long id){
-        return this.roadTripService.getRoadTripById(id);
+    @ApiOperation(value = "Get roadTrip et steps by ID")
+    String getRoadTripAndStepsById(@PathVariable final Long id) throws JSONException {
+        return returnRoadtrip(id).toString();
     }
 
-    @GetMapping(value="/user/{user_id}",produces="application/json")
-    @ApiOperation(value = "Get roadTrip by user_id")
-    RoadTrip getRoadTripByUser(@PathVariable final Long user_id){
-        return this.roadTripService.getRoadTripByUser(user_id);
+    @GetMapping(value="/user/{id}",produces="application/json")
+    @ApiOperation(value = "Get roadTrips et steps by user")
+    String getRoadTripAndStepsByUserId(@PathVariable final Long id) throws JSONException {
+        User user = this.userService.getUserById(id).get();
+        Set<RoadTrip> roadTrips = user.getRoadTrips();
+        JSONObject jsonObject = getRoadTrips(roadTrips);
+
+        return jsonObject.toString();
     }
 
-    @GetMapping(value="/ultimate_roadtrip/{id}",produces="application/json")
-    @ApiOperation(value = "Get ultimate roadTrip")
-    String getUltimateRoadTripById(@PathVariable final Long id) throws JSONException {
+    @GetMapping(value="",produces="application/json")
+    @ApiOperation(value = "Get all roadTrips et steps")
+    String getallRoadTripAndSteps() throws JSONException {
+        Iterable<RoadTrip> roadTrips = this.roadTripService.getAllRoadTrips();
+        JSONObject jsonObject = getRoadTrips(roadTrips);
+
+        return jsonObject.toString();
+    }
+
+    JSONObject returnRoadtrip(Long id) throws JSONException{
         JSONObject jsonObject = new JSONObject();
         JSONObject stepJsonObject;
         JSONObject roadTripJsonObject;
 
-        RoadTrip roadTrip = this.roadTripService.getRoadTripById(id);
+        RoadTrip roadTrip = this.roadTripService.getRoadTripById(id).get();
         Set<Step> steps = roadTrip.getSteps();
 
         int i = 1;
         if(steps.size() == 1){
-            jsonObject.put("startRoadTrip", roadTrip.getSteps().iterator().next().getStartPoint());
-            jsonObject.put("endRoadTrip", roadTrip.getSteps().iterator().next().getEndPoint());
+            jsonObject.put("startPoint", roadTrip.getSteps().iterator().next().getStartPoint());
+            jsonObject.put("endPoint", roadTrip.getSteps().iterator().next().getEndPoint());
+            jsonObject.put("passengers", roadTrip.getSteps().iterator().next().getPassengers());
+            jsonObject.put("canceled", roadTrip.getSteps().iterator().next().getCanceled());
+            jsonObject.put("distance", roadTrip.getSteps().iterator().next().getDistance());
+            jsonObject.put("estimateEndTime", roadTrip.getSteps().iterator().next().getEstimateEndTime());
+            jsonObject.put("estimateStartTime", roadTrip.getSteps().iterator().next().getEstimateStartTime());
+            jsonObject.put("price", roadTrip.getSteps().iterator().next().getPrice());
+            jsonObject.put("additionalInformation", roadTrip.getAdditionalInformation());
+            jsonObject.put("capacity", roadTrip.getCapacity());
+            jsonObject.put("remainingPlace", roadTrip.getRemainingPlace());
+            jsonObject.put("onlyTwoBackSeatWarranty", roadTrip.isOnlyTwoBackSeatWarranty());
         }else{
             roadTripJsonObject = new JSONObject();
+            Double distanceRoadTrip = 0.0;
+            Double priceRoadTrip = 0.0;
             for(Step step : steps){
                 stepJsonObject = new JSONObject();
                 stepJsonObject.put("startPoint", step.getStartPoint());
                 stepJsonObject.put("endPoint", step.getEndPoint());
+                stepJsonObject.put("passengers", step.getPassengers());
+                stepJsonObject.put("canceled", step.getCanceled());
+                stepJsonObject.put("distance", step.getDistance());
+                stepJsonObject.put("estimateEndTime", step.getEstimateEndTime());
+                stepJsonObject.put("estimateStartTime", step.getEstimateStartTime());
+                stepJsonObject.put("price", step.getPrice());
 
-                jsonObject.put("step-" + i++, stepJsonObject);
+                distanceRoadTrip = distanceRoadTrip + step.getDistance();
+                priceRoadTrip = priceRoadTrip + step.getPrice();
+
+                jsonObject.accumulate("step-" + i++, stepJsonObject);
                 if(i==2){
                     roadTripJsonObject.put("startPoint", step.getStartPoint());
+                    roadTripJsonObject.put("estimateStartTime", step.getEstimateStartTime());
                 }else{
                     roadTripJsonObject.put("endPoint", step.getEndPoint());
+                    roadTripJsonObject.put("estimateEndTime", step.getEstimateEndTime());
                 }
             }
-            jsonObject.put("roadTrip",roadTripJsonObject);
+            roadTripJsonObject.put("additionalInformation", roadTrip.getAdditionalInformation());
+            roadTripJsonObject.put("capacity", roadTrip.getCapacity());
+            roadTripJsonObject.put("remainingPlace", roadTrip.getRemainingPlace());
+            roadTripJsonObject.put("onlyTwoBackSeatWarranty", roadTrip.isOnlyTwoBackSeatWarranty());
+            roadTripJsonObject.put("canceled", roadTrip.isCanceled());
+            roadTripJsonObject.put("distance",distanceRoadTrip);
+            roadTripJsonObject.put("price",priceRoadTrip);
+
+
+            jsonObject.accumulate("roadTrip",roadTripJsonObject);
+
         }
 
-        return jsonObject.toString();
+        return jsonObject;
+    }
+
+    /**
+     * Boucle sur les roadtrips
+     */
+    private JSONObject getRoadTrips(Iterable<RoadTrip> roadTrips) throws JSONException{
+        JSONObject jsonObject = new JSONObject();
+
+        int i = 1;
+        for(RoadTrip roadTrip : roadTrips){
+            jsonObject.put("roadtrip" + i++,returnRoadtrip(roadTrip.getId()));
+        }
+
+        return jsonObject;
     }
 }
