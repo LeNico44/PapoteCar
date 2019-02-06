@@ -44,6 +44,17 @@ public class GenericService<T extends CrudRepository<E, Long>,E> {
         return new java.sql.Date(date.getTime());
     }
 
+    //Convertisseur de String en Date util
+    public Date stringToDateUtil(String string) throws ParseException {
+        //déclaration du format de la date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        //Conversation de la string en simpleDateFormat
+        Date date = sdf.parse(string);
+        //Retour de la date en sql date
+        return new Date(date.getTime());
+    }
+
     //Convertisseur de String en boolean
     public boolean stringToBoolean(String string){
         boolean theBoolean = false;
@@ -70,5 +81,9 @@ public class GenericService<T extends CrudRepository<E, Long>,E> {
         }
 
         return value;
+    }
+
+    public Double rounder(Double aDouble){
+        return (double) Math.round(aDouble * 100) / 100;
     }
 }

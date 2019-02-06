@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -27,7 +29,7 @@ public class StepServiceImpl extends GenericService<StepRepository, Step> implem
     @Override
     public Double calculPrice(Double distance) {
         Double stepPrice;
-        stepPrice = (double) Math.round((distance * PRICE_PER_KILOMETER) * 100) / 100;
+        stepPrice = rounder(distance * PRICE_PER_KILOMETER);
         return stepPrice;
     }
 
@@ -72,13 +74,35 @@ public class StepServiceImpl extends GenericService<StepRepository, Step> implem
     }
 
     @Override
+    public String calculTimeDuration(Date dateStart, Date dateEnd){
+        Instant tStart = dateStart.toInstant();
+        Instant tEnd = dateEnd.toInstant();
+
+        Long durationLong = Duration.between(tStart, tEnd).toMinutes();
+
+        String timeDuration = durationLong + " minutes";
+
+        System.out.println(timeDuration);
+
+        return timeDuration;
+    }
+
+    @Override
     public java.sql.Date calculEndTimeFromString(String travelTime, String startTime) throws ParseException {
+
+        Date date = getTimeZone(startTime);
+
+        return calculEndTime(travelTime, date);
+    }
+
+    @Override
+    public Date getTimeZone(String aDate) throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date date = sdf.parse(startTime);
+        Date date = sdf.parse(aDate);
 
-        return calculEndTime(travelTime, date);
+        return date;
     }
 
 
